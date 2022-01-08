@@ -15,7 +15,7 @@
 
 $router->get('/', function () use ($router) {
 return [
-        'API Documentation URL => https://documenter.getpostman.com/view/6959988/UVJeFFxk',
+        'API Documentation URL => https://documenter.getpostman.com/view/6959988/UVXerxZ3',
         'API Server URL => https://ohamx.herokuapp.com/'
     ];
 });
