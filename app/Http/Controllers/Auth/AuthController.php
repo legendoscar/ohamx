@@ -2,8 +2,7 @@
 
     namespace App\Http\Controllers\Auth;
     
-    use App\Models\User;
-    use App\Models\StoresModel;  
+    use App\Models\User; 
     use App\Http\Controllers\Controller;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Http\Request;
@@ -11,6 +10,8 @@
     use Tymon\JWTAuth\Facades\JWTAuth as JWTAuth;
     use Tymon\JWTAuth\Exceptions\JWTException;
     use Illuminate\Support\Facades\Validator;
+    use Carbon\Carbon;
+    use App\Models\LastLoginModel;
 
     class AuthController extends Controller
     {
@@ -152,6 +153,15 @@
             }
 
             $user = auth()->user()->isAdmin == 1 ? 'Admin' : 'User';
+
+            //update login details
+            
+            $lastlogin = new LastLoginModel;
+            $lastlogin->user_id = auth()->user()->id;
+            $lastlogin->last_login = Carbon::now();
+
+            $lastlogin->save();
+
 
         }catch (JWTException $e) {
             return response()->json([
