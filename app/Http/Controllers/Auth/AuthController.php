@@ -42,10 +42,10 @@
                 'lname' => 'required|bail|string',
                 'email' => 'required|bail|email|unique:users',
                 'phone' => 'bail|numeric|unique:users',
-                'password' => 'required|bail|min:6|confirmed',
+                'password' => 'bail|required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
                 'profile_image' => 'bail|file',
                 'designation' => 'bail|string',
-                'dob' => 'bail|string',
+                'dob' => 'bail|date|before:-18 years',
                 'location' => 'bail|string',
             ];
 
