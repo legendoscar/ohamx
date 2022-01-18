@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-Class CryptoModel extends Model {
+Class EwalletsModel extends Model {
 
     use SoftDeletes, HasFactory;
 
@@ -27,32 +27,31 @@ Class CryptoModel extends Model {
 
     // asset_cat_id for crypto = 1
 
-    public function getAllCrypto(){
-        $c = new CryptoModel;
-
-        // return  $c->asset_cat_id;
+    public function getAllEwallets(){
+    
         try {
             $query = $this
             ->where('is_available', '=', 1)
-            ->where('asset_cat_id', '=', 1)
+            ->where('asset_cat_id', '=', 2)
             ->get();
             $count = count($query);
             return response()->json([
-            'msg' => $count . ' Crypto coins returned successfully.',
+            'msg' => $count . ' Ewallets returned successfully.',
                 'data' => $query,
                 'statusCode' => 200,
             ], 200);
             }catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'No crypto coin found!', 
+                    'msg' => 'No ewallet coin found!', 
                     'err' => $e->getMessage(),
+                    'asset_type' => 'Ewallets',
                     'statusCode' => 409
                 ], 409);
             }
     }
 
 
-    public function showOneCrypto($id){
+    public function showOneEwallet($id){
         try {
             
             $data = $this->findOrFail($id); 
@@ -60,10 +59,11 @@ Class CryptoModel extends Model {
                 ? $ret = response()->json([
                     'data'=> $data,
                     'msg' => $data->asset_title . ' Record returned successfully.',
+                    'asset_type' => 'Ewallets',
                     'statusCode' => 200
                 ], 200)
                 : $ret = response()->json([
-                'msg' => 'No Record found for crypto `' . $data->asset_title . '` with ID: ' . $id,
+                'msg' => 'No Record found for ewallet `' . $data->asset_title . '` with ID: ' . $id,
                 'statusCode' => 404
             ], 404);
     
@@ -91,24 +91,24 @@ Class CryptoModel extends Model {
                 $request->file('asset_image')->move($destinationPath, $image_name);
             }
 
-            $CryptoModel = new CryptoModel;
-            // $CryptoModel->asset_cat_id = 1;
+            $EwalletsModel = new EwalletsModel;
+            // $EwalletsModel->asset_cat_id = 1;
 
-            $CryptoModel->asset_cat_id = 1;
-            $CryptoModel->asset_title = $request->asset_title;
-            $CryptoModel->asset_code = $request->asset_code;
-            $CryptoModel->asset_image = $request->asset_image;
-            $CryptoModel->asset_tc = $request->asset_tc;
-            $CryptoModel->save();
+            $EwalletsModel->asset_cat_id = 1;
+            $EwalletsModel->asset_title = $request->asset_title;
+            $EwalletsModel->asset_code = $request->asset_code;
+            $EwalletsModel->asset_image = $request->asset_image;
+            $EwalletsModel->asset_tc = $request->asset_tc;
+            $EwalletsModel->save();
 
             return response()->json([
-                'data' => $CryptoModel,
-                'msg' => 'New Crypto Coin: `' . $request->asset_title .'` created successfully',
+                'data' => $EwalletsModel,
+                'msg' => 'New ewallet: `' . $request->asset_title .'` created successfully',
                 'statusCode' => 201
             ], 201);
             } catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'Crypto Coin creation failed!',
+                    'msg' => 'ewallet creation failed!',
                     'err' => $e->getMessage(),
                     'statusCode' => 409
                 ], 409);
@@ -121,28 +121,28 @@ Class CryptoModel extends Model {
         try {
 
             // return $request->all();
-            $CryptoModel = CryptoModel::findorFail($request->id);
+            $EwalletsModel = EwalletsModel::findorFail($request->id);
         
-            $CryptoModel->asset_cat_id = 1;
-            $CryptoModel->asset_title = $request->filled('asset_title') ? $request->asset_title : $CryptoModel->asset_title;
-            $CryptoModel->asset_code = $request->filled('asset_code') ? $request->asset_code : $CryptoModel->asset_code;
-            $CryptoModel->asset_image = $request->filled('asset_image') ? $request->asset_image : $CryptoModel->asset_image;
-            $CryptoModel->asset_tc = $request->filled('asset_tc') ? $request->asset_tc : $CryptoModel->asset_tc;
-            $CryptoModel->is_available = $request->filled('is_available') ? $request->is_available : $CryptoModel->is_available;
-            $CryptoModel->is_new = $request->filled('is_new') ? $request->is_new : $CryptoModel->is_new;
-            $CryptoModel->is_popular = $request->filled('is_popular') ? $request->is_popular : $CryptoModel->is_popular;
-            $CryptoModel->is_recommended = $request->filled('is_recommended') ? $request->is_recommended : $CryptoModel->is_recommended;
+            $EwalletsModel->asset_cat_id = 1;
+            $EwalletsModel->asset_title = $request->filled('asset_title') ? $request->asset_title : $EwalletsModel->asset_title;
+            $EwalletsModel->asset_code = $request->filled('asset_code') ? $request->asset_code : $EwalletsModel->asset_code;
+            $EwalletsModel->asset_image = $request->filled('asset_image') ? $request->asset_image : $EwalletsModel->asset_image;
+            $EwalletsModel->asset_tc = $request->filled('asset_tc') ? $request->asset_tc : $EwalletsModel->asset_tc;
+            $EwalletsModel->is_available = $request->filled('is_available') ? $request->is_available : $EwalletsModel->is_available;
+            $EwalletsModel->is_new = $request->filled('is_new') ? $request->is_new : $EwalletsModel->is_new;
+            $EwalletsModel->is_popular = $request->filled('is_popular') ? $request->is_popular : $EwalletsModel->is_popular;
+            $EwalletsModel->is_recommended = $request->filled('is_recommended') ? $request->is_recommended : $EwalletsModel->is_recommended;
 
-            $CryptoModel->save();
+            $EwalletsModel->save();
 
             return response()->json([
-                'data' => $CryptoModel,
-                'msg' => '`' . $CryptoModel->asset_title . '` details updated successfully.',
+                'data' => $EwalletsModel,
+                'msg' => '`' . $EwalletsModel->asset_title . '` details updated successfully.',
                 'statusCode' => 200
             ], 200);
             }catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'Crypto coin update operation failed!',
+                    'msg' => 'ewallet update operation failed!',
                     'err' => $e->getMessage(),
                     'statusCode' => 409
             ], 409);
@@ -152,23 +152,23 @@ Class CryptoModel extends Model {
     }
 
      /**
-     * Get popular crypto coins.
+     * Get popular ewallets.
      *
      * @return void
      */
 
-    public function getPopularCrypto(){
+    public function getPopularEwallets(){
         try {
-            $query = $this->where('asset_cat_id', '=', 1)->where('is_popular', '=', 1)->get();
+            $query = $this->where('asset_cat_id', '=', 2)->where('is_popular', '=', 1)->get();
             $count = count($query);
             return response()->json([
-            'msg' => $count . ' Crypto coins returned successfully.',
+            'msg' => $count . ' ewallets returned successfully.',
                 'data' => $query,
                 'statusCode' => 200,
             ], 200);
             }catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'No crypto coin found!', 
+                    'msg' => 'No ewallet found!', 
                     'err' => $e->getMessage(),
                     'statusCode' => 409
                 ], 409);
@@ -176,22 +176,22 @@ Class CryptoModel extends Model {
     }
     
     /**
-     * Get recommended crypto coins.
+     * Get recommended ewallets.
      *
      * @return void
      */
-    public function getRecommendedCrypto(){
+    public function getRecommendedEwallets(){
         try {
-            $query = $this->where('asset_cat_id', '=', 1)->where('is_recommended', '=', 1)->get();
+            $query = $this->where('asset_cat_id', '=', 2)->where('is_recommended', '=', 1)->get();
             $count = count($query);
             return response()->json([
-            'msg' => $count . ' Crypto coins returned successfully.',
+            'msg' => $count . ' ewallets returned successfully.',
                 'data' => $query,
                 'statusCode' => 200,
             ], 200);
             }catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'No crypto coin found!', 
+                    'msg' => 'No ewallet found!', 
                     'err' => $e->getMessage(),
                     'statusCode' => 409
                 ], 409);
@@ -200,22 +200,22 @@ Class CryptoModel extends Model {
     
     
     /**
-     * Get new crypto coins.
+     * Get new ewallets.
      *
      * @return void
      */
-    public function getNewCrypto(){
+    public function getNewEwallets(){
         try {
-            $query = $this->where('asset_cat_id', '=', 1)->where('is_new', '=', 1)->get();
+            $query = $this->where('asset_cat_id', '=', 2)->where('is_new', '=', 1)->get();
             $count = count($query);
             return response()->json([
-            'msg' => $count . ' Crypto coins returned successfully.',
+            'msg' => $count . ' ewallets returned successfully.',
                 'data' => $query,
                 'statusCode' => 200,
             ], 200);
             }catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'No crypto coin found!', 
+                    'msg' => 'No ewallet found!', 
                     'err' => $e->getMessage(),
                     'statusCode' => 409
                 ], 409);
@@ -224,23 +224,23 @@ Class CryptoModel extends Model {
    
 
     /**
-     * Get unavailable crypto coins.
+     * Get unavailable ewallets.
      *
      * @return void
      */
    
-    public function getUnAvailableCrypto(){
+    public function getUnAvailableEwallets(){
         try {
-            $query = $this->where('asset_cat_id', '=', 1)->where('is_available', '=', 0)->get();
+            $query = $this->where('asset_cat_id', '=', 2)->where('is_available', '=', 0)->get();
             $count = count($query);
             return response()->json([
-            'msg' => $count . ' Crypto coins returned successfully.',
+            'msg' => $count . ' ewallets returned successfully.',
                 'data' => $query,
                 'statusCode' => 200,
             ], 200);
             }catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'No crypto coin found!', 
+                    'msg' => 'No ewallet found!', 
                     'err' => $e->getMessage(),
                     'statusCode' => 409
                 ], 409);

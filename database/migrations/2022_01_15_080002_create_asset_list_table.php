@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCryptoCoinsListTable extends Migration
+class CreateAssetListTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateCryptoCoinsListTable extends Migration
      */
     public function up()
     {
-        Schema::create('crypto_coins_list', function (Blueprint $table) {
+        Schema::create('asset_list', function (Blueprint $table) {
             $table->id();
-            $table->string('coin_title');
-            $table->string('coin_code');
-            $table->string('coin_image')->nullable();
-            $table->text('coin_tc')->nullable();
+            $table->string('asset_title');
+            $table->unsignedBigInteger('asset_cat_id');
+            $table->string('asset_code');
+            $table->string('asset_image')->nullable();
+            $table->text('asset_tc')->nullable();
             $table->boolean('is_available')->default(1);
             $table->boolean('is_new')->default(0);
             $table->boolean('is_popular')->default(0);
@@ -26,6 +27,9 @@ class CreateCryptoCoinsListTable extends Migration
 
             $table->timestamps();
             $table->softDeletes();
+
+
+            $table->foreign('asset_cat_id')->references('id')->on('asset_category');
         });
     }
 

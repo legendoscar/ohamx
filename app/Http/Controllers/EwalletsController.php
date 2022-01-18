@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CryptoModel;
+use App\Models\EwalletsModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
 
-class CryptoController extends Controller 
+class EwalletsController extends Controller 
 {
 
     public function __construct()
@@ -24,9 +24,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getAllCrypto(CryptoModel $CryptoModel)
+    public function getAllEwallets(EwalletsModel $EwalletsModel)
     { 
-       return $CryptoModel->getAllCrypto();
+       return $EwalletsModel->getAllEwallets();
     }
 
 
@@ -35,9 +35,9 @@ class CryptoController extends Controller
      *
      * @return void
      */
-    public function showOneCrypto(Request $request, CryptoModel $CryptoModel)
+    public function showOneEwallet(Request $request, EwalletsModel $EwalletsModel)
     {
-        return $CryptoModel->showOneCrypto($request->id);
+        return $EwalletsModel->showOneEwallet($request->id);
     }
 
 
@@ -46,7 +46,7 @@ class CryptoController extends Controller
      *
      * @return void
      */
-    public function createCryptoCoin(Request $request, CryptoModel $CryptoModel)
+    public function createCryptoCoin(Request $request, EwalletsModel $EwalletsModel)
     {    
         // return 33;      
         $rules = [
@@ -69,12 +69,12 @@ class CryptoController extends Controller
             ], 422);
         };
         
-        return $CryptoModel->createCryptoCoin($request);
+        return $EwalletsModel->createCryptoCoin($request);
        
     }
 
 
-    public function updateCryptoCoin(Request $request, CryptoModel $CryptoModel, $id)
+    public function updateCryptoCoin(Request $request, EwalletsModel $EwalletsModel, $id)
     {
 
             $rules = [
@@ -97,20 +97,20 @@ class CryptoController extends Controller
                 ], 422);
              };
 
-             return $CryptoModel->updateCryptoCoin($request);
+             return $EwalletsModel->updateCryptoCoin($request);
 
        
     }
 
 
-    public function deleteOneCrypto($id)
+    public function deleteOneEwallet($id)
     {
-        $CryptoModelData = CryptoModel::findOrFail($id);
+        $EwalletsModelData = EwalletsModel::findOrFail($id);
        
             try {
-                $CryptoModelData->delete();
+                $EwalletsModelData->delete();
                 return response()->json([
-                    'msg' => 'Deleted successfully!',
+                    'msg' => $EwalletsModelData->asset_title . ' Deleted successfully!',
                     'statusCode' => 200
                 ], 200);
                 }catch(\Exception $e){
@@ -121,34 +121,16 @@ class CryptoController extends Controller
                     ], 409);
             }
         }
-
-
-    public function ProductBelongsTo($id){
-        try {
-            $data = CryptoModel::find($id)->ProductsCategory;
-            return response()->json([
-                'msg' => 'Category selection successful!',
-                'data' => $data,
-                'statusCode' => 200
-            ], 200);
-        }catch(\Exception $e){
-            return response()->json([
-                'msg' => 'Failed to retrieve data!',
-                'err' => $e->getMessage(),
-                'statusCode' => 409
-            ], 409);
-        }
-    }
     
     /**
-     * Get popular crypto coins.
+     * Get popular Ewallets.
      *
      * @return void
      */
 
-    public function getPopularCrypto(CryptoModel $CryptoModel)
+    public function getPopularEwallets(EwalletsModel $EwalletsModel)
     { 
-       return $CryptoModel->getPopularCrypto();
+       return $EwalletsModel->getPopularEwallets();
     }
     
     
@@ -158,9 +140,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getRecommendedCrypto(CryptoModel $CryptoModel)
+    public function getRecommendedEwallets(EwalletsModel $EwalletsModel)
     { 
-       return $CryptoModel->getRecommendedCrypto();
+       return $EwalletsModel->getRecommendedEwallets();
     }
     
     /**
@@ -169,9 +151,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getNewCrypto(CryptoModel $CryptoModel)
+    public function getNewEwallets(EwalletsModel $EwalletsModel)
     { 
-       return $CryptoModel->getNewCrypto();
+       return $EwalletsModel->getNewEwallets();
     }
 
 
@@ -181,9 +163,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getAvailableCrypto(CryptoModel $CryptoModel)
+    public function getAvailableEwallets(EwalletsModel $EwalletsModel)
     { 
-       return $this->getAllCrypto($CryptoModel);
+       return $this->getAllEwallets($EwalletsModel);
     }
     
     /**
@@ -192,9 +174,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getUnAvailableCrypto(CryptoModel $CryptoModel)
+    public function getUnAvailableEwallets(EwalletsModel $EwalletsModel)
     { 
-       return $CryptoModel->getUnAvailableCrypto($CryptoModel);
+       return $EwalletsModel->getUnAvailableEwallets($EwalletsModel);
     }
     
    
