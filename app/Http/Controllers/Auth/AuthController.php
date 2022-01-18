@@ -17,7 +17,6 @@
     {
         protected $guard = 'users'; 
 
-        protected $username;
 
         
         public function __construct()
@@ -25,36 +24,9 @@
             $this->middleware('auth:api', ['except' => ['login','registerUser', 'registerStore']]);
             $this->middleware('storeCanCreate', ['only' => ['registerStore']]);
 
-            $this->username = $this->findUsername();
+           
         }
 
-        /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function findUsername()
-    {
-        $login = request()->input('login');
- 
-        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
- 
-        request()->merge([$fieldType => $login]);
- 
-        return $fieldType;
-    }
- 
-    /**
-     * Get username property.
-     *
-     * @return string
-     */
-    public function username()
-    {
-        return $this->username;
-    }
-
-    
         /**
          * Store a new user.
          *
@@ -111,7 +83,7 @@
                 
                 $user->save();
     
-                $this->login($request);
+                // $this->login($request);
                 return response()->json( [
                             'data' => $user, 
                             'action' => 'create', 
@@ -141,11 +113,11 @@
         {
               //validate incoming request 
             $this->validate($request, [
-                'login' => 'required|string',
+                'email' => 'required|string',
                 'password' => 'required|string',
             ]);
     
-            $credentials = $request->only(['email', 'username', 'password']);
+            $credentials = $request->only(['email', 'password']);
     
             try{
             if (! $token = auth()->attempt($credentials)) {			
@@ -175,6 +147,7 @@
             ], 200);
         }
         
+
          /**
          * Get user details.
          *
@@ -249,8 +222,9 @@
     public function logout( Request $request ) {
 
         $token = $request->header( 'Authorization' );
-
+        
         try {
+            if (!$token){ return response()->json(['msg' => 'token_not_found'], 404);}
             JWTAuth::parseToken()->invalidate( $token );
 
             return response()->json( [

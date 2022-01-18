@@ -20,7 +20,7 @@ use App\Http\Controllers;
 
 $router->group(['prefix' => 'api'], function ($router) 
 {
-    $router->get('profile', ['uses' => 'Auth\AuthController@getAuthenticatedUser']);
+    $router->get('user/profile', ['uses' => 'UserProfileController@profile']);
 });
  
 
