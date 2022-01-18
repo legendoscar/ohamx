@@ -20,4 +20,19 @@ return [
     ];
 });
 
+$router->group(['prefix' => 'api'], function ($router) 
+{
+    $router->get('crypto', ['uses' => 'CryptoController@getAllCrypto']);
+    $router->get('crypto/show/{id:[0-9]+}', ['uses' => 'CryptoController@showOneCrypto']);
+    $router->post('crypto', ['uses' => 'CryptoController@createCryptoCoin']);
+    $router->put('crypto/{id:[0-9]+}', ['uses' => 'CryptoController@updateCryptoCoin']);
+    $router->delete('crypto/{id:[0-9]+}', ['uses' => 'CryptoController@deleteOneCrypto']);
+    
+    $router->get('crypto/popular', ['uses' => 'CryptoController@getPopularCrypto']);
+    $router->get('crypto/recommended', ['uses' => 'CryptoController@getRecommendedCrypto']);
+    $router->get('crypto/new', ['uses' => 'CryptoController@getNewCrypto']);
+    $router->get('crypto/available', ['uses' => 'CryptoController@getAvailableCrypto']);
+    $router->get('crypto/unavailable', ['uses' => 'CryptoController@getUnAvailableCrypto']);
+});
+
 

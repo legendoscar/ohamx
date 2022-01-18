@@ -124,6 +124,13 @@
                 return response()->json(['message' => 'Unauthorized. Invalid credentials'], 401);
             }
 
+            // if (auth()->user()->email_verified_at == null){
+            //     return response()->json(['message' => 'Forbidden. Kindly verify your email before proceeding.'], 401);
+            // }elseif(auth()->user()->phone_verified_at == null){
+            //     return response()->json(['message' => 'Forbidden. Kindly verify your email before proceeding.'], 401);
+            // }
+
+
             $user = auth()->user()->isAdmin == 1 ? 'Admin' : 'User';
 
             //update login details

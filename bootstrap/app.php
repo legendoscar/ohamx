@@ -82,6 +82,7 @@ $app->instance('path.public', app()->basePath() . DIRECTORY_SEPARATOR . 'public'
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'admin' => App\Http\Middleware\IsAdminMiddleware::class,
 ]);
 
 /*

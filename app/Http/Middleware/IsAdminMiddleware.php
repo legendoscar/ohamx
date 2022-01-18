@@ -25,6 +25,6 @@ class IsAdminMiddleware
         return response()->json([
             'msg' => 'Forbidden! You don\'t have admin access', 
             'errCode' => 403 
-        ]);
+        ], 403);
     }
 }
