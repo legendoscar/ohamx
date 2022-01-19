@@ -19,8 +19,9 @@ class CreateAssetCategoryTable extends Migration
             $table->string('code')->nullable();
             $table->string('image')->nullable();
 
-            $table->timestamps();
-            $table->softDeletes();
+            $table->timestamp('asset_category_creation_date', 0)->nullable();
+            $table->timestamp('asset_category_update_date', 0)->nullable();
+            $table->softDeletes('asset_category_deleted_at', 0)->nullable();
         });
     }
 

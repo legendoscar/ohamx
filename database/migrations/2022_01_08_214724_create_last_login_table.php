@@ -17,8 +17,11 @@ class CreateLastLoginTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('last_login');
-            $table->timestamps();
-            $table->softDeletes();
+            
+            
+            $table->timestamp('user_login_creation_date', 0)->nullable();
+            $table->timestamp('user_login_update_date', 0)->nullable();
+            $table->softDeletes('user_login_deleted_at', 0)->nullable();
 
 
             $table->foreign('user_id')->references('id')->on('users');

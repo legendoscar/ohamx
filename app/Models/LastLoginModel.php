@@ -17,5 +17,14 @@ Class LastLoginModel extends Model {
 
     protected $fillable = ['user_id', 'last_login']; 
 
+    /**
+     * The attributes for date created and updated at.
+     *
+     * @var array
+     */
+    const CREATED_AT = 'user_login_creation_date';
+    const UPDATED_AT = 'user_login_update_date';
+    const DELETED_AT = 'user_login_deleted_at';
+
 
 }

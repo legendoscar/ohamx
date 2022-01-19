@@ -29,7 +29,6 @@ $router->group(['prefix' => 'api'], function ($router)
     
     /* EWALLETS */
     $router->get('ewallets', ['uses' => 'EwalletsController@getAllEwallets']);
-    $router->get('ewallets/{id:[0-9]+}', ['uses' => 'EwalletsController@showOneEwallet']);
     $router->post('ewallets', ['uses' => 'EwalletsController@createEwallet']);
     $router->put('ewallets/{id:[0-9]+}', ['uses' => 'EwalletsController@updateEwallet']);
     $router->delete('ewallets/{id:[0-9]+}', ['uses' => 'EwalletsController@deleteOneEwallet']);
@@ -38,6 +37,10 @@ $router->group(['prefix' => 'api'], function ($router)
     $router->get('ewallets/new', ['uses' => 'EwalletsController@getNewEwallets']);
     $router->get('ewallets/available', ['uses' => 'EwalletsController@getAvailableEwallets']);
     $router->get('ewallets/unavailable', ['uses' => 'EwalletsController@getUnAvailableEwallets']);
+    
+    
+    /* EXCHANGE RATES */
+    $router->get('rates/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@showAssetExchangeRates']);
 });
 
 

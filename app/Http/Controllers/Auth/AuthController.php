@@ -150,6 +150,7 @@
             return  response()->json([
                 'msg' => $user . ' Login successful',
                 'tokenData' => $this->respondWithToken($token),
+                'lastLogin' => $lastlogin->orderBy('id', 'desc')->first('last_login'),
                 'userData' => auth()->user()                    
             ], 200);
         }

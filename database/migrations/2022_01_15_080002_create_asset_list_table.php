@@ -26,8 +26,9 @@ class CreateAssetListTable extends Migration
             $table->boolean('is_popular')->default(0);
             $table->boolean('is_recommended')->default(0);
 
-            $table->timestamps();
-            $table->softDeletes();
+            $table->timestamp('asset_list_creation_date', 0)->nullable();
+            $table->timestamp('asset_list_update_date', 0)->nullable();
+            $table->softDeletes('asset_list_deleted_at', 0)->nullable();
 
 
             $table->foreign('asset_cat_id')->references('id')->on('asset_category');

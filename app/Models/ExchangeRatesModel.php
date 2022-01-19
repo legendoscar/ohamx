@@ -10,24 +10,15 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-Class CryptoModel extends Model {
+Class ExchangeRatesModel extends Model {
 
     use SoftDeletes, HasFactory;
 
-    protected $table = 'asset_list';
+    protected $table = 'exchange_rates';
 
-    protected $fillable = ['asset_cat_id', 'asset_title', 'asset_symbol', 'asset_image', 'asset_tc']; 
+    protected $fillable = ['asset_id', 'min_range', 'max_range', 'rate', 'remarks']; 
 
     // public $asset_cat_id = 1;
-
-    /**
-     * The attributes for date created at, deleted at and updated at columns.
-     *
-     * @var array
-     */
-    const CREATED_AT = 'asset_list_creation_date';
-    const UPDATED_AT = 'asset_list_update_date';
-    const DELETED_AT = 'asset_list_deleted_at';
 
     public function __construct()
     {
@@ -35,6 +26,10 @@ Class CryptoModel extends Model {
     }
 
     // asset_cat_id for crypto = 1
+
+    public function showAssetExchangeRates($id){
+
+    }
 
     public function getAllCrypto(){
         $c = new CryptoModel;

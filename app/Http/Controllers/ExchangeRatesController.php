@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CryptoModel;
-use Carbon\Carbon;
+use App\Models\ExchangeRatesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
 
-class CryptoController extends Controller 
+class ExchangeRatesController extends Controller 
 {
 
     public function __construct()
@@ -18,6 +17,23 @@ class CryptoController extends Controller
         
     } 
 
+    public function showAssetExchangeRates(ExchangeRatesModel $ExchangeRatesModel, $id){
+        // return 33;
+
+        $query = $ExchangeRatesModel
+            ->where('is_active', '=', 1)
+            ->where('asset_id', '=', $id)
+            ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
+            // ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
+            ->get();
+
+            return response()->json([
+                'msg' => count($query) . ' exchange rates found.',
+                'data' => $query, 
+                'statusCode' => 200
+            ], 200);
+
+    }
 
     /**
      * Show all crypto instance.
@@ -25,9 +41,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getAllCrypto(CryptoModel $CryptoModel)
+    public function getAllCrypto(ExchangeRatesModel $ExchangeRatesModel)
     { 
-       return $CryptoModel->getAllCrypto();
+       return $ExchangeRatesModel->getAllCrypto();
     }
 
 
@@ -36,9 +52,9 @@ class CryptoController extends Controller
      *
      * @return void
      */
-    public function showOneCrypto(Request $request, CryptoModel $CryptoModel)
+    public function showOneCrypto(Request $request, ExchangeRatesModel $ExchangeRatesModel)
     {
-        return $CryptoModel->showOneCrypto($request->id);
+        return $ExchangeRatesModel->showOneCrypto($request->id);
     }
 
 
@@ -47,7 +63,7 @@ class CryptoController extends Controller
      *
      * @return void
      */
-    public function createCryptoCoin(Request $request, CryptoModel $CryptoModel)
+    public function createCryptoCoin(Request $request, ExchangeRatesModel $ExchangeRatesModel)
     {    
         // return 33;      
         $rules = [
@@ -71,12 +87,12 @@ class CryptoController extends Controller
             ], 422);
         };
         
-        return $CryptoModel->createCryptoCoin($request);
+        return $ExchangeRatesModel->createCryptoCoin($request);
        
     }
 
 
-    public function updateCryptoCoin(Request $request, CryptoModel $CryptoModel, $id)
+    public function updateCryptoCoin(Request $request, ExchangeRatesModel $ExchangeRatesModel, $id)
     {
 
             $rules = [
@@ -100,7 +116,7 @@ class CryptoController extends Controller
                 ], 422);
              };
 
-             return $CryptoModel->updateCryptoCoin($request);
+             return $ExchangeRatesModel->updateCryptoCoin($request);
 
        
     }
@@ -108,14 +124,13 @@ class CryptoController extends Controller
 
     public function deleteOneCrypto($id)
     {
-        $CryptoModelData = CryptoModel::findOrFail($id);
+        $ExchangeRatesModelData = ExchangeRatesModel::findOrFail($id);
        
             try {
-                $CryptoModelData->delete();
+                $ExchangeRatesModelData->delete();
                 return response()->json([
                     'msg' => 'Deleted successfully!',
-                    'statusCode' => 200,
-                    'time' => Carbon::now()
+                    'statusCode' => 200
                 ], 200);
                 }catch(\Exception $e){
                     return response()->json([
@@ -129,7 +144,7 @@ class CryptoController extends Controller
 
     public function ProductBelongsTo($id){
         try {
-            $data = CryptoModel::find($id)->ProductsCategory;
+            $data = ExchangeRatesModel::find($id)->ProductsCategory;
             return response()->json([
                 'msg' => 'Category selection successful!',
                 'data' => $data,
@@ -150,9 +165,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getPopularCrypto(CryptoModel $CryptoModel)
+    public function getPopularCrypto(ExchangeRatesModel $ExchangeRatesModel)
     { 
-       return $CryptoModel->getPopularCrypto();
+       return $ExchangeRatesModel->getPopularCrypto();
     }
     
     
@@ -162,9 +177,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getRecommendedCrypto(CryptoModel $CryptoModel)
+    public function getRecommendedCrypto(ExchangeRatesModel $ExchangeRatesModel)
     { 
-       return $CryptoModel->getRecommendedCrypto();
+       return $ExchangeRatesModel->getRecommendedCrypto();
     }
     
     /**
@@ -173,9 +188,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getNewCrypto(CryptoModel $CryptoModel)
+    public function getNewCrypto(ExchangeRatesModel $ExchangeRatesModel)
     { 
-       return $CryptoModel->getNewCrypto();
+       return $ExchangeRatesModel->getNewCrypto();
     }
 
 
@@ -185,9 +200,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getAvailableCrypto(CryptoModel $CryptoModel)
+    public function getAvailableCrypto(ExchangeRatesModel $ExchangeRatesModel)
     { 
-       return $this->getAllCrypto($CryptoModel);
+       return $this->getAllCrypto($ExchangeRatesModel);
     }
     
     /**
@@ -196,9 +211,9 @@ class CryptoController extends Controller
      * @return void
      */
 
-    public function getUnAvailableCrypto(CryptoModel $CryptoModel)
+    public function getUnAvailableCrypto(ExchangeRatesModel $ExchangeRatesModel)
     { 
-       return $CryptoModel->getUnAvailableCrypto($CryptoModel);
+       return $ExchangeRatesModel->getUnAvailableCrypto($ExchangeRatesModel);
     }
     
    

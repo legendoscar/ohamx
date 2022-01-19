@@ -23,9 +23,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
        'username', 'fname', 'lname', 'email', 'phone', 'isActive', 'isAdmin', 'profile_image',
-        'gender', 'dob', 'designation', 'location'
+        'gender', 'dob', 'designation', 'location', 'user_creation_date', 'user_update_date',
     ];
   
+    
+    
+    /**
+     * The attributes for date created at, deleted at and updated at columns.
+     *
+     * @var array
+     */
+    const CREATED_AT = 'user_creation_date';
+    const UPDATED_AT = 'user_update_date';
+    const DELETED_AT = 'user_deleted_at';
+    
+    
+    
     /**
      * The attributes excluded from the model's JSON form.
      *

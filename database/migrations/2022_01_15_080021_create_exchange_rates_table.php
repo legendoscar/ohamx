@@ -16,13 +16,16 @@ class CreateExchangeRatesTable extends Migration
         Schema::create('exchange_rates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('asset_id');
-            $table->unsignedInteger('min_range');
-            $table->unsignedInteger('max_range');
+            $table->unsignedFloat('min_range');
+            $table->unsignedFloat('max_range');
             $table->unsignedFloat('rate');
             $table->text('remarks')->nullable();
+            $table->boolean('is_active')->default(1);
+            $table->unique(['asset_id', 'min_range', 'max_range', 'rate']);
 
-            $table->timestamps();
-            $table->softDeletes();
+            $table->timestamp('rate_creation_date', 0)->nullable();
+            $table->timestamp('rate_update_date', 0)->nullable();
+            $table->softDeletes('rate_deleted_at', 0)->nullable();
 
             $table->foreign('asset_id')->references('id')->on('asset_list');
         });

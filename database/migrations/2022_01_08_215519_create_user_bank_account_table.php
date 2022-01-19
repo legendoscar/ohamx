@@ -16,8 +16,11 @@ class CreateUserBankAccountTable extends Migration
         Schema::create('user_bank_account', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->timestamps();
-            $table->softDeletes();
+            
+            
+            $table->timestamp('user_bank_creation_date', 0)->nullable();
+            $table->timestamp('user_bank_update_date', 0)->nullable();
+            $table->softDeletes('user_bank_deleted_at', 0)->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
         });

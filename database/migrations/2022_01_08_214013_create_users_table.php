@@ -31,8 +31,10 @@ class CreateUsersTable extends Migration
             $table->date('email_verified_at')->nullable();
             $table->date('phone_verified_at')->nullable();
             $table->rememberToken();
-            $table->timestamps();
-            $table->softDeletes();
+
+            $table->timestamp('user_creation_date', 0)->nullable();
+            $table->timestamp('user_update_date', 0)->nullable();
+            $table->softDeletes('user_deleted_at', 0)->nullable();
         });
     }
 
