@@ -122,7 +122,7 @@ class ExchangeRatesController extends Controller
     }
 
 
-    public function deleteOneCrypto($id)
+    public function deleteExchangeRate($id)
     {
         $ExchangeRatesModelData = ExchangeRatesModel::findOrFail($id);
        
@@ -140,24 +140,6 @@ class ExchangeRatesController extends Controller
                     ], 409);
             }
         }
-
-
-    public function ProductBelongsTo($id){
-        try {
-            $data = ExchangeRatesModel::find($id)->ProductsCategory;
-            return response()->json([
-                'msg' => 'Category selection successful!',
-                'data' => $data,
-                'statusCode' => 200
-            ], 200);
-        }catch(\Exception $e){
-            return response()->json([
-                'msg' => 'Failed to retrieve data!',
-                'err' => $e->getMessage(),
-                'statusCode' => 409
-            ], 409);
-        }
-    }
     
     /**
      * Get popular crypto coins.
