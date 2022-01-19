@@ -15,9 +15,10 @@ class CreateAssetListTable extends Migration
     {
         Schema::create('asset_list', function (Blueprint $table) {
             $table->id();
-            $table->string('asset_title');
             $table->unsignedBigInteger('asset_cat_id');
-            $table->string('asset_code');
+            $table->string('asset_title');
+            $table->string('asset_symbol');
+            $table->string('asset_slug')->nullable();
             $table->string('asset_image')->nullable();
             $table->text('asset_tc')->nullable();
             $table->boolean('is_available')->default(1);
@@ -40,6 +41,6 @@ class CreateAssetListTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('crypto_coins_list');
+        Schema::dropIfExists('asset_list');
     }
 }

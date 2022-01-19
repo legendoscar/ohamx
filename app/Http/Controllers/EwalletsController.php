@@ -13,7 +13,7 @@ class EwalletsController extends Controller
     public function __construct()
     {
         // $this->middleware('auth:api', ['except' => ['showAll', 'showOneCrypto', 'showStoreProducts']]);
-        $this->middleware('admin', ['only' => ['createCryptoCoin', 'deleteOneCrypto', 'updateCryptoCoin']]);
+        $this->middleware('admin', ['only' => ['createEwallet', 'deleteOneEwallet', 'updateEwallet']]);
         
     } 
 
@@ -42,17 +42,18 @@ class EwalletsController extends Controller
 
 
     /**
-     * Create a new crypto instance.
+     * Create a new ewallet instance.
      *
      * @return void
      */
-    public function createCryptoCoin(Request $request, EwalletsModel $EwalletsModel)
+    public function createEwallet(Request $request, EwalletsModel $EwalletsModel)
     {    
         // return 33;      
         $rules = [
             'asset_title' => 'bail|required|string|unique:asset_list,asset_title',
-            'asset_code' => 'bail|required|string|unique:asset_list,asset_code',
+            'asset_symbol' => 'bail|required|string|unique:asset_list,asset_symbol',
             'asset_image' => 'bail|file',
+            'asset_slug' => 'bail|string',
             'asset_tc' => 'bail|string',
             'is_available' => 'bail|boolean',
             'is_new' => 'bail|boolean',
@@ -69,18 +70,19 @@ class EwalletsController extends Controller
             ], 422);
         };
         
-        return $EwalletsModel->createCryptoCoin($request);
+        return $EwalletsModel->createEwallet($request);
        
     }
 
 
-    public function updateCryptoCoin(Request $request, EwalletsModel $EwalletsModel, $id)
+    public function updateEwallet(Request $request, EwalletsModel $EwalletsModel, $id)
     {
 
             $rules = [
                 'asset_title' => 'bail|string|unique:asset_list,asset_title',
-                'asset_code' => 'bail|string|unique:asset_list,asset_code',
+                'asset_symbol' => 'bail|string|unique:asset_list,asset_symbol',
                 'asset_image' => 'bail|file',
+                'asset_slug' => 'bail|string',
                 'asset_tc' => 'bail|string',
                 'is_available' => 'bail|boolean',
                 'is_new' => 'bail|boolean',

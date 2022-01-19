@@ -16,7 +16,7 @@ Class EwalletsModel extends Model {
 
     protected $table = 'asset_list';
 
-    protected $fillable = ['asset_cat_id', 'asset_title', 'asset_code', 'asset_image', 'asset_tc']; 
+    protected $fillable = ['asset_cat_id', 'asset_title', 'asset_symbol', 'asset_image', 'asset_tc']; 
 
     // public $asset_cat_id = 1;
 
@@ -96,7 +96,8 @@ Class EwalletsModel extends Model {
 
             $EwalletsModel->asset_cat_id = 1;
             $EwalletsModel->asset_title = $request->asset_title;
-            $EwalletsModel->asset_code = $request->asset_code;
+            $EwalletsModel->asset_symbol = $request->asset_symbol;
+            $EwalletsModel->asset_slug = $request->asset_slug;
             $EwalletsModel->asset_image = $request->asset_image;
             $EwalletsModel->asset_tc = $request->asset_tc;
             $EwalletsModel->save();
@@ -125,9 +126,10 @@ Class EwalletsModel extends Model {
         
             $EwalletsModel->asset_cat_id = 1;
             $EwalletsModel->asset_title = $request->filled('asset_title') ? $request->asset_title : $EwalletsModel->asset_title;
-            $EwalletsModel->asset_code = $request->filled('asset_code') ? $request->asset_code : $EwalletsModel->asset_code;
+            $EwalletsModel->asset_symbol = $request->filled('asset_symbol') ? $request->asset_symbol : $EwalletsModel->asset_symbol;
             $EwalletsModel->asset_image = $request->filled('asset_image') ? $request->asset_image : $EwalletsModel->asset_image;
             $EwalletsModel->asset_tc = $request->filled('asset_tc') ? $request->asset_tc : $EwalletsModel->asset_tc;
+            $EwalletsModel->asset_slug = $request->filled('asset_slug') ? $request->asset_slug : $EwalletsModel->asset_slug;
             $EwalletsModel->is_available = $request->filled('is_available') ? $request->is_available : $EwalletsModel->is_available;
             $EwalletsModel->is_new = $request->filled('is_new') ? $request->is_new : $EwalletsModel->is_new;
             $EwalletsModel->is_popular = $request->filled('is_popular') ? $request->is_popular : $EwalletsModel->is_popular;

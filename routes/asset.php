@@ -30,8 +30,8 @@ $router->group(['prefix' => 'api'], function ($router)
     /* EWALLETS */
     $router->get('ewallets', ['uses' => 'EwalletsController@getAllEwallets']);
     $router->get('ewallets/{id:[0-9]+}', ['uses' => 'EwalletsController@showOneEwallet']);
-    // $router->post('crypto', ['uses' => 'EwalletsController@createCryptoCoin']);
-    // $router->put('ewallets/{id:[0-9]+}', ['uses' => 'EwalletsController@updateCryptoCoin']);
+    $router->post('ewallets', ['uses' => 'EwalletsController@createEwallet']);
+    $router->put('ewallets/{id:[0-9]+}', ['uses' => 'EwalletsController@updateEwallet']);
     $router->delete('ewallets/{id:[0-9]+}', ['uses' => 'EwalletsController@deleteOneEwallet']);
     $router->get('ewallets/popular', ['uses' => 'EwalletsController@getPopularEwallets']);
     $router->get('ewallets/recommended', ['uses' => 'EwalletsController@getRecommendedEwallets']);

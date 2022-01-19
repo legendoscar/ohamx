@@ -51,8 +51,9 @@ class CryptoController extends Controller
         // return 33;      
         $rules = [
             'asset_title' => 'bail|required|string|unique:asset_list,asset_title',
-            'asset_code' => 'bail|required|string|unique:asset_list,asset_code',
+            'asset_symbol' => 'bail|required|string|unique:asset_list,asset_symbol',
             'asset_image' => 'bail|file',
+            'asset_slug' => 'bail|string',
             'asset_tc' => 'bail|string',
             'is_available' => 'bail|boolean',
             'is_new' => 'bail|boolean',
@@ -79,7 +80,8 @@ class CryptoController extends Controller
 
             $rules = [
                 'asset_title' => 'bail|string|unique:asset_list,asset_title',
-                'asset_code' => 'bail|string|unique:asset_list,asset_code',
+                'asset_symbol' => 'bail|string|unique:asset_list,asset_symbol',
+                'asset_slug' => 'bail|string',
                 'asset_image' => 'bail|file',
                 'asset_tc' => 'bail|string',
                 'is_available' => 'bail|boolean',

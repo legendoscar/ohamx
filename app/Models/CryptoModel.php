@@ -16,7 +16,7 @@ Class CryptoModel extends Model {
 
     protected $table = 'asset_list';
 
-    protected $fillable = ['asset_cat_id', 'asset_title', 'asset_code', 'asset_image', 'asset_tc']; 
+    protected $fillable = ['asset_cat_id', 'asset_title', 'asset_symbol', 'asset_image', 'asset_tc']; 
 
     // public $asset_cat_id = 1;
 
@@ -96,7 +96,8 @@ Class CryptoModel extends Model {
 
             $CryptoModel->asset_cat_id = 1;
             $CryptoModel->asset_title = $request->asset_title;
-            $CryptoModel->asset_code = $request->asset_code;
+            $CryptoModel->asset_symbol = $request->asset_symbol;
+            $CryptoModel->asset_slug = $request->asset_slug;
             $CryptoModel->asset_image = $request->asset_image;
             $CryptoModel->asset_tc = $request->asset_tc;
             $CryptoModel->save();
@@ -125,9 +126,10 @@ Class CryptoModel extends Model {
         
             $CryptoModel->asset_cat_id = 1;
             $CryptoModel->asset_title = $request->filled('asset_title') ? $request->asset_title : $CryptoModel->asset_title;
-            $CryptoModel->asset_code = $request->filled('asset_code') ? $request->asset_code : $CryptoModel->asset_code;
+            $CryptoModel->asset_symbol = $request->filled('asset_symbol') ? $request->asset_symbol : $CryptoModel->asset_symbol;
             $CryptoModel->asset_image = $request->filled('asset_image') ? $request->asset_image : $CryptoModel->asset_image;
             $CryptoModel->asset_tc = $request->filled('asset_tc') ? $request->asset_tc : $CryptoModel->asset_tc;
+            $CryptoModel->asset_slug = $request->filled('asset_slug') ? $request->asset_slug : $CryptoModel->asset_slug;
             $CryptoModel->is_available = $request->filled('is_available') ? $request->is_available : $CryptoModel->is_available;
             $CryptoModel->is_new = $request->filled('is_new') ? $request->is_new : $CryptoModel->is_new;
             $CryptoModel->is_popular = $request->filled('is_popular') ? $request->is_popular : $CryptoModel->is_popular;
