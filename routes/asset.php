@@ -40,7 +40,15 @@ $router->group(['prefix' => 'api'], function ($router)
     
     
     /* EXCHANGE RATES */
-    $router->get('rates/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@showAssetExchangeRates']);
+    // SINGLE ASSET
+    $router->get('rates/asset/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@showExchangeRatesForAnAsset']);
+    $router->delete('rates/asset/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@deleteExchangeRatesForAnAsset']); //working on
+    
+    //SINGLE RATE
+    $router->get('rates/id/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@showSingleExchangeRate']);
+    $router->post('rates', ['uses' => 'ExchangeRatesController@createAssetExchangeRate']);
+    $router->put('rates/id/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@updateAssetExchangeRate']);
+    $router->delete('rates/id/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@deleteExchangeRate']);
 });
 
 

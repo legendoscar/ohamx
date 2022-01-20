@@ -16,9 +16,17 @@ Class ExchangeRatesModel extends Model {
 
     protected $table = 'exchange_rates';
 
-    protected $fillable = ['asset_id', 'min_range', 'max_range', 'rate', 'remarks']; 
+    protected $fillable = ['asset_id', 'min_range', 'max_range', 'rate', 'remarks', 'is_active']; 
 
-    // public $asset_cat_id = 1;
+    
+     /**
+     * The attributes for date created at, deleted at and updated at columns.
+     *
+     * @var array
+     */
+    const CREATED_AT = 'rate_creation_date';
+    const UPDATED_AT = 'rate_update_date';
+    const DELETED_AT = 'rate_deleted_at';
 
     public function __construct()
     {
@@ -27,12 +35,37 @@ Class ExchangeRatesModel extends Model {
 
     // asset_cat_id for crypto = 1
 
-    public function showAssetExchangeRates($id){
+    public function showExchangeRatesForAnAsset($id){
 
+        $query = $this
+            ->where('is_active', '=', 1)
+            ->where('asset_id', '=', $id)
+            // ->where('asset_list_deleted_at', '=', null)
+            ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
+            // ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
+            ->get();
+
+            return response()->json([
+                'msg' => count($query) . ' exchange rates found.',
+                'data' => $query, 
+                'statusCode' => 200
+            ], 200);
+    }
+    
+    
+    public function showSingleExchangeRate($id){
+
+        $query = $this->findOrFail($id);
+
+            return response()->json([
+                'msg' => 'Exchange rate returned successfully!',
+                'data' => $query, 
+                'statusCode' => 200
+            ], 200);
     }
 
     public function getAllCrypto(){
-        $c = new CryptoModel;
+        $c = new ExchangeRatesModel;
 
         // return  $c->asset_cat_id;
         try {
@@ -56,18 +89,18 @@ Class ExchangeRatesModel extends Model {
     }
 
 
-    public function showOneCrypto($id){
+    public function showOneExchangeRate($id){
         try {
             
             $data = $this->findOrFail($id); 
             !empty($data)
                 ? $ret = response()->json([
                     'data'=> $data,
-                    'msg' => $data->asset_title . ' Record returned successfully.',
+                    'msg' => 'Record returned successfully.',
                     'statusCode' => 200
                 ], 200)
                 : $ret = response()->json([
-                'msg' => 'No Record found for crypto `' . $data->asset_title . '` with ID: ' . $id,
+                'msg' => 'No Record found for exchange rate with ID: ' . $id,
                 'statusCode' => 404
             ], 404);
     
@@ -83,37 +116,27 @@ Class ExchangeRatesModel extends Model {
         }
 
         
-    public function createCryptoCoin(Request $request){
+    public function createAssetExchangeRate(Request $request){
         try{
-            
-            $image_name = $request->asset_image;
-            if($request->hasFile('asset_image')){
-                $image_name = $request->asset_image->getClientOriginalName();
 
-                $path = 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR;
-                $destinationPath = app()->basePath($path);
-                $request->file('asset_image')->move($destinationPath, $image_name);
-            }
-
-            $CryptoModel = new CryptoModel;
-            // $CryptoModel->asset_cat_id = 1;
-
-            $CryptoModel->asset_cat_id = 1;
-            $CryptoModel->asset_title = $request->asset_title;
-            $CryptoModel->asset_symbol = $request->asset_symbol;
-            $CryptoModel->asset_slug = $request->asset_slug;
-            $CryptoModel->asset_image = $request->asset_image;
-            $CryptoModel->asset_tc = $request->asset_tc;
-            $CryptoModel->save();
+            $ExchangeRatesModel = new ExchangeRatesModel;
+         
+            $ExchangeRatesModel->asset_id = $request->asset_id;
+            $ExchangeRatesModel->min_range = $request->min_range;
+            $ExchangeRatesModel->max_range = $request->max_range;
+            $ExchangeRatesModel->rate = $request->rate;
+            $ExchangeRatesModel->remarks = $request->remarks;
+            $ExchangeRatesModel->is_active = $request->is_active;
+            $ExchangeRatesModel->save();
 
             return response()->json([
-                'data' => $CryptoModel,
-                'msg' => 'New Crypto Coin: `' . $request->asset_title .'` created successfully',
+                'data' => $ExchangeRatesModel,
+                'msg' => 'New Exchange rate created successfully',
                 'statusCode' => 201
             ], 201);
             } catch(\Exception $e){
                 return response()->json([
-                    'msg' => 'Crypto Coin creation failed!',
+                    'msg' => 'Exchange rate creation failed!',
                     'err' => $e->getMessage(),
                     'statusCode' => 409
                 ], 409);
@@ -122,28 +145,25 @@ Class ExchangeRatesModel extends Model {
     }
 
 
-    public function updateCryptoCoin(Request $request){
+    public function updateAssetExchangeRate(Request $request){
         try {
 
             // return $request->all();
-            $CryptoModel = CryptoModel::findorFail($request->id);
+            $ExchangeRatesModel = ExchangeRatesModel::findorFail($request->id);
         
-            $CryptoModel->asset_cat_id = 1;
-            $CryptoModel->asset_title = $request->filled('asset_title') ? $request->asset_title : $CryptoModel->asset_title;
-            $CryptoModel->asset_symbol = $request->filled('asset_symbol') ? $request->asset_symbol : $CryptoModel->asset_symbol;
-            $CryptoModel->asset_image = $request->filled('asset_image') ? $request->asset_image : $CryptoModel->asset_image;
-            $CryptoModel->asset_tc = $request->filled('asset_tc') ? $request->asset_tc : $CryptoModel->asset_tc;
-            $CryptoModel->asset_slug = $request->filled('asset_slug') ? $request->asset_slug : $CryptoModel->asset_slug;
-            $CryptoModel->is_available = $request->filled('is_available') ? $request->is_available : $CryptoModel->is_available;
-            $CryptoModel->is_new = $request->filled('is_new') ? $request->is_new : $CryptoModel->is_new;
-            $CryptoModel->is_popular = $request->filled('is_popular') ? $request->is_popular : $CryptoModel->is_popular;
-            $CryptoModel->is_recommended = $request->filled('is_recommended') ? $request->is_recommended : $CryptoModel->is_recommended;
+            $ExchangeRatesModel->asset_id = 1;
+            $ExchangeRatesModel->min_range = $request->filled('min_range') ? $request->min_range : $ExchangeRatesModel->min_range;
+            $ExchangeRatesModel->max_range = $request->filled('max_range') ? $request->max_range : $ExchangeRatesModel->max_range;
+            $ExchangeRatesModel->rate = $request->filled('rate') ? $request->rate : $ExchangeRatesModel->rate;
+            $ExchangeRatesModel->remarks = $request->filled('remarks') ? $request->remarks : $ExchangeRatesModel->remarks;
+            $ExchangeRatesModel->is_active = $request->filled('is_active') ? $request->is_active : $ExchangeRatesModel->is_active;
+            $ExchangeRatesModel->rate_update_date = Carbon::now();
 
-            $CryptoModel->save();
+            $ExchangeRatesModel->save();
 
             return response()->json([
-                'data' => $CryptoModel,
-                'msg' => '`' . $CryptoModel->asset_title . '` details updated successfully.',
+                'data' => $ExchangeRatesModel,
+                'msg' => '`' . $ExchangeRatesModel->asset_title . '` details updated successfully.',
                 'statusCode' => 200
             ], 200);
             }catch(\Exception $e){

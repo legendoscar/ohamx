@@ -13,69 +13,69 @@ class ExchangeRatesController extends Controller
     public function __construct()
     {
         // $this->middleware('auth:api', ['except' => ['showAll', 'showOneCrypto', 'showStoreProducts']]);
-        $this->middleware('admin', ['only' => ['createCryptoCoin', 'deleteOneCrypto', 'updateCryptoCoin']]);
+        $this->middleware('admin', ['only' => ['createAssetExchangeRate', 'updateAssetExchangeRate', 'deleteAssetExchangeRate']]);
         
     } 
 
-    public function showAssetExchangeRates(ExchangeRatesModel $ExchangeRatesModel, $id){
-        // return 33;
 
-        $query = $ExchangeRatesModel
-            ->where('is_active', '=', 1)
-            ->where('asset_id', '=', $id)
-            ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
-            // ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
-            ->get();
-
-            return response()->json([
-                'msg' => count($query) . ' exchange rates found.',
-                'data' => $query, 
-                'statusCode' => 200
-            ], 200);
-
-    }
-
-    /**
-     * Show all crypto instance.
-     *
-     * @return void
-     */
-
-    public function getAllCrypto(ExchangeRatesModel $ExchangeRatesModel)
-    { 
-       return $ExchangeRatesModel->getAllCrypto();
-    }
-
-
-    /**
-     * Show single crypto instance.
-     *
-     * @return void
-     */
-    public function showOneCrypto(Request $request, ExchangeRatesModel $ExchangeRatesModel)
+    public function assets()
     {
-        return $ExchangeRatesModel->showOneCrypto($request->id);
+        // $this->hasOne('App\Models\');
     }
 
 
     /**
-     * Create a new crypto instance.
+     * Show all Exchange Rates for An Asset.
      *
      * @return void
      */
-    public function createCryptoCoin(Request $request, ExchangeRatesModel $ExchangeRatesModel)
+
+    public function showExchangeRatesForAnAsset(ExchangeRatesModel $ExchangeRatesModel, $id)
+    {
+        return $ExchangeRatesModel->showExchangeRatesForAnAsset($id);       
+
+    }
+    
+    
+    /**
+     * Show all Exchange Rates for An Asset.
+     *
+     * @return void
+     */
+
+    public function showSingleExchangeRate(ExchangeRatesModel $ExchangeRatesModel, $id)
+    {
+        return $ExchangeRatesModel->showSingleExchangeRate($id);       
+
+    }
+
+
+    /**
+     * Show single exchange rate for single asset.
+     *
+     * @return void
+     */
+    public function showOneExchangeRate(Request $request, ExchangeRatesModel $ExchangeRatesModel)
+    {
+        return $ExchangeRatesModel->showOneExchangeRate($request->id);
+    }
+
+
+    /**
+     * Create a new exchange rate for an asset.
+     *
+     * @return void
+     */
+    public function createAssetExchangeRate(Request $request, ExchangeRatesModel $ExchangeRatesModel)
     {    
         // return 33;      
         $rules = [
-            'asset_title' => 'bail|required|string|unique:asset_list,asset_title',
-            'asset_symbol' => 'bail|required|string|unique:asset_list,asset_symbol',
-            'asset_image' => 'bail|file',
-            'asset_slug' => 'bail|string',
-            'asset_tc' => 'bail|string',
-            'is_available' => 'bail|boolean',
-            'is_new' => 'bail|boolean',
-            'is_popular' => 'bail|boolean',
-            'is_recommended' => 'bail|boolean',
+            'asset_id' => 'bail|required|integer|exists:asset_list,id',
+            'min_range' => 'bail|required|numeric',
+            'max_range' => 'bail|required|numeric',
+            'rate' => 'bail|required|numeric',
+            'remarks' => 'bail|string',
+            'is_active' => 'bail|boolean',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -87,24 +87,28 @@ class ExchangeRatesController extends Controller
             ], 422);
         };
         
-        return $ExchangeRatesModel->createCryptoCoin($request);
+        return $ExchangeRatesModel->createAssetExchangeRate($request);
        
     }
 
 
-    public function updateCryptoCoin(Request $request, ExchangeRatesModel $ExchangeRatesModel, $id)
+
+    /**
+     * Update exchange rate for an asset.
+     *
+     * @return void
+     */
+    public function updateAssetExchangeRate(Request $request, ExchangeRatesModel $ExchangeRatesModel, $id)
     {
 
+        // return 33;
             $rules = [
-                'asset_title' => 'bail|string|unique:asset_list,asset_title',
-                'asset_symbol' => 'bail|string|unique:asset_list,asset_symbol',
-                'asset_slug' => 'bail|string',
-                'asset_image' => 'bail|file',
-                'asset_tc' => 'bail|string',
-                'is_available' => 'bail|boolean',
-                'is_new' => 'bail|boolean',
-                'is_popular' => 'bail|boolean',
-                'is_recommended' => 'bail|boolean',
+            'asset_id' => 'bail|required|string|exists:asset_list,id',
+            'min_range' => 'bail|numeric',
+            'max_range' => 'bail|numeric',
+            'rate' => 'bail|numeric',
+            'remarks' => 'bail|string',
+            'is_active' => 'bail|boolean',
             ];
     
             $validator = Validator::make($request->all(), $rules);
@@ -116,20 +120,23 @@ class ExchangeRatesController extends Controller
                 ], 422);
              };
 
-             return $ExchangeRatesModel->updateCryptoCoin($request);
+             return $ExchangeRatesModel->updateAssetExchangeRate($request);
 
        
     }
 
-
+    /**
+     * Delete a single exchange rate for an asset.
+     *
+     * @return void
+     */
     public function deleteExchangeRate($id)
     {
-        $ExchangeRatesModelData = ExchangeRatesModel::findOrFail($id);
-       
-            try {
-                $ExchangeRatesModelData->delete();
+        
+        try {
+                ExchangeRatesModel::findOrFail($id)->delete();
                 return response()->json([
-                    'msg' => 'Deleted successfully!',
+                    'msg' => 'Exchange rate Deleted successfully!',
                     'statusCode' => 200
                 ], 200);
                 }catch(\Exception $e){
@@ -141,62 +148,48 @@ class ExchangeRatesController extends Controller
             }
         }
     
-    /**
-     * Get popular crypto coins.
+    
+        /**
+     * Delete a single exchange rate for an asset.
      *
      * @return void
      */
+    public function deleteExchangeRatesForAnAsset($id)
+    {
+        
+        try {
+                // return
+                $id =
+                ExchangeRatesModel::
+                where('is_active', '=', 1)
+                ->where('asset_id', '=', $id)
+                ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
+                // ->join('asset_list', 'exchange_rates.asset_id', 'asset_list.id')
+                // ->get();
+                ->pluck('exchange_rates.id');
 
-    public function getPopularCrypto(ExchangeRatesModel $ExchangeRatesModel)
-    { 
-       return $ExchangeRatesModel->getPopularCrypto();
-    }
+
+                $ids = explode(",", $id);
+
+
+             return  ExchangeRatesModel::find($id)->each(function($rate, $key){
+                   return $key;
+                   $key->delete();
+               });
+                return response()->json([
+                    'msg' => 'Exchange rates Deleted for selected asset successfully!',
+                    'statusCode' => 200
+                ], 200);
+            }catch(\Exception $e){
+                return response()->json([
+                    'msg' => 'Delete operation failed!',
+                    'err' => $e->getMessage(),
+                    'statusCode' => 409
+                ], 409);
+            }
+        }
     
     
-    /**
-     * Get recommended crypto coins.
-     *
-     * @return void
-     */
-
-    public function getRecommendedCrypto(ExchangeRatesModel $ExchangeRatesModel)
-    { 
-       return $ExchangeRatesModel->getRecommendedCrypto();
-    }
-    
-    /**
-     * Get new crypto coins.
-     *
-     * @return void
-     */
-
-    public function getNewCrypto(ExchangeRatesModel $ExchangeRatesModel)
-    { 
-       return $ExchangeRatesModel->getNewCrypto();
-    }
-
-
-    /**
-     * Get available crypto coins.
-     *
-     * @return void
-     */
-
-    public function getAvailableCrypto(ExchangeRatesModel $ExchangeRatesModel)
-    { 
-       return $this->getAllCrypto($ExchangeRatesModel);
-    }
-    
-    /**
-     * Get unavailable crypto coins.
-     *
-     * @return void
-     */
-
-    public function getUnAvailableCrypto(ExchangeRatesModel $ExchangeRatesModel)
-    { 
-       return $ExchangeRatesModel->getUnAvailableCrypto($ExchangeRatesModel);
-    }
     
    
 }
