@@ -20,4 +20,23 @@ return [
     ];
 });
 
+$router->group(['prefix' => 'api'], function ($router) 
+{
+    /* BLOG POST */
+    $router->get('blog', ['uses' => 'BlogPostsController@showAllPublishedAndActivePosts']);
+    $router->post('blog', ['uses' => 'BlogPostsController@createBlogPost']);
+    $router->get('blog/{id:[0-9]+}', ['uses' => 'BlogPostsController@showSingleBlogPost']);
+    $router->put('blog/{id:[0-9]+}', ['uses' => 'BlogPostsController@updateSingleBlogPost']);
+    $router->delete('blog/{id:[0-9]+}', ['uses' => 'BlogPostsController@deleteSingleBlogPost']);
+    
+    $router->get('blog/author/{id}', ['uses' => 'BlogPostsController@showAllBlogPostsByAuthor']);
+
+    //status
+    $router->get('blog/drafts', ['uses' => 'CryptoController@getRecommendedCrypto']);
+    $router->get('crypto/new', ['uses' => 'CryptoController@getNewCrypto']);
+
+
+
+});
+
 
