@@ -25,7 +25,7 @@ class CreateTransactionsTable extends Migration
             $table->softDeletes('txn_deleted_at', 0)->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('asset_id')->references('id')->on('asset_list');
+            $table->foreign('asset_id')->references('id')->on('asset_list'); 
         });
     }
  
