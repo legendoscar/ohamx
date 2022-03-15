@@ -41,11 +41,14 @@ Class BlogPostModel extends Model {
 
     ];
 
-
-
     public function __construct()
     {
         // $this->author_id = $author_id; 
+    }
+
+
+    public function comments(){
+        return $this->hasMany(CommentsModel::class)->whereNull('parent_id');
     }
 
 

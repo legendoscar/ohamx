@@ -21,7 +21,7 @@ class CreateBlogPostsTable extends Migration
             $table->string('post_slug')->nullable();
             $table->string('post_image')->nullable();
             $table->boolean('isActve')->default(1);
-            $table->boolean('isPublished')->default(1);
+            $table->boolean('isPublished')->default(1); 
             $table->date('date_drafted')->nullable();
             $table->date('date_published')->nullable();
             // $table->unsignedBigInteger('cat_id')->nullable();
