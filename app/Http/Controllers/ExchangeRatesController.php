@@ -6,10 +6,11 @@ use App\Models\ExchangeRatesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
+// use \AmrShawky\LaravelCurrency\Facade\Currency;
 
 class ExchangeRatesController extends Controller 
 {
-
+// use Currency;
     public function __construct()
     {
         // $this->middleware('auth:api', ['except' => ['showAll', 'showOneCrypto', 'showStoreProducts']]);
@@ -25,9 +26,90 @@ class ExchangeRatesController extends Controller
 
 
     /**
+     * Convert between currencies.
+     *
+     * @return object
+     */
+
+    public function currencyConversion(ExchangeRatesModel $ExchangeRatesModel, Request $request)
+    {
+
+        $rules = [
+            'amount' => 'bail|numeric',
+            'to' => 'bail|string|max:3',
+            'from' => 'bail|string|required',
+            // 'date' => 'bail|date|after_or_equal:2000-01-01',
+            
+        ];
+
+        $messages = [
+            // 'gte' => 'The deposit amount starts from N10,000.00 upwards' ,
+            // 'required' => 'The :attribute field is required.',
+            // 'file' => 'You are required to upload your proof of payment before proceeding',
+            // 'mimes' => 'Only jpeg, png, bmp, pdf, svg, gif & tiff files are allowed.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errorMsg' => $validator->errors(), 
+                'statusCode' => 422
+            ], 422);
+        };
+
+
+
+        return $ExchangeRatesModel->currencyConversion($request);       
+
+    }
+    
+    
+     /**
+     * Convert between currencies.
+     *
+     * @return object
+     */
+
+    public function currencyLatestRates(ExchangeRatesModel $ExchangeRatesModel, Request $request)
+    {
+
+        $rules = [
+            'amount' => 'bail|numeric',
+            'currency' => 'bail|array|max:3',
+            'currency.*' => 'bail|string|distinct|max:3',
+            // 'date' => 'bail|date|after_or_equal:2000-01-01',
+            
+        ];
+
+        $messages = [
+            // 'gte' => 'The deposit amount starts from N10,000.00 upwards' ,
+            // 'required' => 'The :attribute field is required.',
+            // 'file' => 'You are required to upload your proof of payment before proceeding',
+            // 'mimes' => 'Only jpeg, png, bmp, pdf, svg, gif & tiff files are allowed.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errorMsg' => $validator->errors(), 
+                'statusCode' => 422
+            ], 422);
+        };
+
+
+
+        return $ExchangeRatesModel->currencyLatestRates($request);       
+
+    }
+
+
+    
+    /**
      * Show all Exchange Rates for An Asset.
      *
-     * @return void
+     * @return object
      */
 
     public function showExchangeRatesForAnAsset(ExchangeRatesModel $ExchangeRatesModel, $id)
@@ -190,6 +272,12 @@ class ExchangeRatesController extends Controller
         }
     
     
+        public function convert(){
+            // Currency::convert()
+            // ->from('USD')
+            // ->to('EUR')
+            // ->get();
+        }
     
    
 }

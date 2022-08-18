@@ -49,6 +49,28 @@ $router->group(['prefix' => 'api'], function ($router)
     $router->post('rates', ['uses' => 'ExchangeRatesController@createAssetExchangeRate']);
     $router->put('rates/id/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@updateAssetExchangeRate']);
     $router->delete('rates/id/{id:[0-9]+}', ['uses' => 'ExchangeRatesController@deleteExchangeRate']);
+
+
+    /* NAIRA WALLET */
+    $router->get('naira-wallet/balance', ['uses' => 'NairaWalletController@getNairaWalletBalance', 'middleware' => ['auth']]);
+    $router->post('naira-wallet/deposit', ['uses' => 'NairaWalletController@depositIntoNairaWallet']);
+    
+    
+    /* TRANSACTIONS */
+    $router->post('transactions/all', ['uses' => 'TransactionsController@getAllTransactions', 'middleware' => ['admin', 'XssSanitizer']]);
+
+    $router->put('transactions/{id:[0-9]+}/confirm', ['uses' => 'TransactionsController@confirmTransaction', 'middleware' => ['admin']]);
+
+    $router->get('transactions/confirmed', ['uses' => 'TransactionsController@getAllConfirmedTransactions', 'middleware' => ['admin']]);
+    $router->get('transactions/unconfirmed', ['uses' => 'TransactionsController@getAllUnconfirmedTransactions', 'middleware' => ['admin']]);
+    $router->post('transactions/date', ['uses' => 'TransactionsController@getAllTxnsByDateRange', 'middleware' => ['admin']]);
+
+
+
+
+
+    $router->get('exchange-rates/convert', ['uses' => 'ExchangeRatesController@currencyConversion']);
+    $router->get('exchange-rates/latest', ['uses' => 'ExchangeRatesController@currencyLatestRates']);
 });
 
 

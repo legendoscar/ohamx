@@ -58,8 +58,9 @@ $app->singleton(
 | the default version. You may register other files below as needed.
 |
 */
-
+$app->configure('services');
 $app->configure('app');
+$app->configure('mail');
 
 $app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config');
 $app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
@@ -83,6 +84,8 @@ $app->instance('path.public', app()->basePath() . DIRECTORY_SEPARATOR . 'public'
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
     'admin' => App\Http\Middleware\IsAdminMiddleware::class,
+    'isOwner' => App\Http\Middleware\IsOwnerMiddleware::class,
+    'XssSanitizer' => App\Http\Middleware\XssSanitizer::class,
 ]);
 
 /*
@@ -99,7 +102,17 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
+$app->alias('cache', \Illuminate\Cache\CacheManager::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class); 
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class); //generators
+$app->register(\Bavix\Wallet\WalletServiceProvider::class); //for wallets
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->register(Laravel\Socialite\SocialiteServiceProvider::class);
+$app->register(AmrShawky\LaravelCurrency\CurrencyServiceProvider::class);
+// $app->register(\charlesassets\LaravelPerfectMoney\LaravelPerfectMoneyServiceProvider::class); //for wallets
+// $app->register(\AmrShawky\LaravelCurrency\Facade\Currency::class); //for currency rate conversion
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -119,5 +132,18 @@ $app->router->group([
     require __DIR__.'/../routes/auth.php';
     require __DIR__.'/../routes/asset.php';
 });
+
+
+
+$app->alias('mail.manager', Illuminate\Mail\MailManager::class);
+$app->alias('mail.manager', Illuminate\Contracts\Mail\Factory::class);
+
+$app->alias('mailer', Illuminate\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
+
+
+$app->alias('Socialite', Laravel\Socialite\Facades\Socialite::class);
+$app->alias('Currency', SSD\Currency\CurrencyFacade::class);
 
 return $app;

@@ -6,7 +6,16 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "amrshawky/laravel-currency": "^5.0",
+        "bavix/laravel-wallet": "^7.3",
+        "bavix/laravel-wallet-swap": "^4.1",
+        "beyondcode/laravel-vouchers": "^2.0",
+        "charlesassets/laravel-perfectmoney": "^1.0",
+        "flipbox/lumen-generator": "^9.1",
+        "illuminate/mail": "8.3.*",
         "laravel/lumen-framework": "^8.3.1",
+        "laravel/socialite": "^5.5",
+        "laravelista/lumen-vendor-publish": "8.0",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

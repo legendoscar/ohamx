@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+
+use AmrShawky\LaravelCurrency\Facade\Currency;
+
 Class ExchangeRatesModel extends Model {
 
     use SoftDeletes, HasFactory;
@@ -271,5 +274,82 @@ Class ExchangeRatesModel extends Model {
                     'statusCode' => 409
                 ], 409);
         }
+    }
+
+
+     /**
+     * Convert between currencies.
+     *
+     * @return object
+     */
+   
+    public function currencyConversion(Request $request)
+    {
+        try {
+            $from = $request->from;
+            $to = $request->to;
+            $amount = $request->amount;
+            // $date = date("Y-m-d");
+            // $date = isset($request->date) ? $request->date : $today;
+                $res = Currency::convert()
+                ->from($from)
+                ->to($to)
+                // ->round(2)
+                // ->source('crypto')
+                // ->date($date)
+                // ->throw()
+                ->amount($amount)
+                ->get();
+
+        return response()->json([
+            'msg' => 'Conversion successful!',
+                'data' => $res,
+                // 'count' => $count,
+                'statusCode' => 200,
+            ], 200);
+            }catch(\Exception $e){
+                return response()->json([
+                    'msg' => 'Conversion failed!', 
+                    'err' => $e->getMessage(),
+                    'statusCode' => 409
+                ], 409);
+            }
+    }
+
+    /**
+     * Convert between currencies.
+     *
+     * @return object
+     */
+   
+    public function currencyLatestRates(Request $request)
+    {
+        try {
+            // $from = $request->from;
+            $base = $request->base;
+            $amount = $request->amount;
+            // $date = date("Y-m-d");
+            // $date = isset($request->date) ? $request->date : $today;
+                $res = Currency::rates()
+                ->latest()
+                // ->symbols(['USD', 'EUR', 'EGP'])
+                ->amount($amount)
+                // ->source('bank view')
+                ->base($base)
+                ->get();
+
+        return response()->json([
+            'msg' => 'Current rates fetched successfully!',
+                'data' => $res,
+                // 'count' => $count,
+                'statusCode' => 200,
+            ], 200);
+            }catch(\Exception $e){
+                return response()->json([
+                    'msg' => 'Conversion failed!', 
+                    'err' => $e->getMessage(),
+                    'statusCode' => 409
+                ], 409);
+            }
     }
 }
